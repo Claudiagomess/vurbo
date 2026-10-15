@@ -1,0 +1,72 @@
+<header class="page-head">
+  <div>
+    <p class="eyebrow">Empresa</p>
+    <h1>Técnicos</h1>
+  </div>
+</header>
+
+<form class="card form-grid" [formGroup]="form" (ngSubmit)="create()">
+  <label>
+    Nome
+    <input formControlName="name" />
+  </label>
+  <label>
+    Utilizador
+    <input formControlName="username" autocomplete="off" />
+  </label>
+  <label>
+    Palavra-passe
+    <input formControlName="password" type="password" autocomplete="new-password" />
+  </label>
+  <div class="wide">
+    <button type="submit" [disabled]="busy()">Criar acesso</button>
+  </div>
+</form>
+
+@if (notice()) {
+  <p class="banner ok">{{ notice() }}</p>
+}
+@if (error()) {
+  <p class="banner" role="alert">{{ error() }}</p>
+}
+
+@if (technicians().length === 0) {
+  <p class="empty-inline">Ainda não há técnicos. Crie o primeiro acesso acima.</p>
+} @else {
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Utilizador</th>
+          <th>Estado</th>
+          <th>Palavra-passe</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (technician of technicians(); track technician.id) {
+          <tr>
+            <td>{{ technician.name }}</td>
+            <td>{{ technician.username }}</td>
+            <td>{{ technician.active ? 'Ativo' : 'Inativo' }}</td>
+            <td>
+              <input
+                type="password"
+                [value]="passwords()[technician.id] || ''"
+                (input)="setPassword(technician.id, $any($event.target).value)"
+                placeholder="Nova palavra-passe"
+              />
+            </td>
+            <td class="actions">
+              <button type="button" class="secondary" (click)="savePassword(technician)">Guardar</button>
+              <button type="button" class="ghost" (click)="toggle(technician)">
+                {{ technician.active ? 'Desativar' : 'Ativar' }}
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}

@@ -1,0 +1,34 @@
+<header class="page-head">
+  <div>
+    <p class="eyebrow">Técnico</p>
+    <h1>Reparações abertas</h1>
+  </div>
+</header>
+
+@if (error()) {
+  <p class="banner" role="alert">{{ error() }}</p>
+}
+
+@if (repairs().length === 0 && !error()) {
+  <section class="empty">
+    <h2>Não há reparações abertas</h2>
+    <p>Quando a empresa publicar uma avaria, ela aparece aqui.</p>
+  </section>
+} @else {
+  <div class="cards">
+    @for (repair of repairs(); track repair.id) {
+      <article class="card job">
+        <div>
+          <p class="eyebrow">{{ repair.locality }}</p>
+          <h2>{{ repair.brand }}</h2>
+          <p>{{ repair.applianceType }}@if (repair.model) { · {{ repair.model }} }</p>
+          <p>{{ repair.description }}</p>
+          <p class="muted">{{ formatWhen(repair.createdAt) }} · {{ repair.applicationCount }} interessado{{ repair.applicationCount === 1 ? '' : 's' }}</p>
+        </div>
+        <button type="button" [disabled]="repair.applied || pending() === repair.id" (click)="apply(repair)">
+          {{ repair.applied ? 'Já candidatado' : pending() === repair.id ? 'A candidatar…' : 'Candidatar-me' }}
+        </button>
+      </article>
+    }
+  </div>
+}

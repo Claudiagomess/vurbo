@@ -1,0 +1,43 @@
+<header class="page-head">
+  <div>
+    <p class="eyebrow">Empresa</p>
+    <h1>Reparações</h1>
+  </div>
+  <a class="button" routerLink="/reparacoes/nova">Nova reparação</a>
+</header>
+
+@if (error()) {
+  <p class="banner" role="alert">{{ error() }}</p>
+} @else if (repairs().length === 0) {
+  <section class="empty">
+    <h2>Ainda não há reparações</h2>
+    <p>Publique a marca, a localidade e a avaria. Os técnicos passam a vê-la de imediato.</p>
+  </section>
+} @else {
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Marca</th>
+          <th>Aparelho</th>
+          <th>Localidade</th>
+          <th>Estado</th>
+          <th>Interessados</th>
+          <th>Criada</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (repair of repairs(); track repair.id) {
+          <tr>
+            <td><a [routerLink]="['/reparacoes', repair.id]">{{ repair.brand }}</a></td>
+            <td>{{ repair.applianceType }}@if (repair.model) { <span class="muted"> · {{ repair.model }}</span> }</td>
+            <td>{{ repair.locality }}</td>
+            <td><span class="pill" [class.open]="repair.status === 'ABERTA'" [class.closed]="repair.status === 'FECHADA'">{{ statusLabel(repair.status) }}</span></td>
+            <td>{{ repair.applicationCount }}</td>
+            <td>{{ formatWhen(repair.createdAt) }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}

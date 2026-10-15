@@ -1,0 +1,27 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:h2:file:./data/vurbo;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;AUTO_SERVER=FALSE}
+    driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME:org.h2.Driver}
+    username: ${SPRING_DATASOURCE_USERNAME:sa}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate.jdbc.time_zone: UTC
+  flyway:
+    enabled: true
+
+vurbo:
+  cors-origins: http://localhost:4200
+  jwt:
+    secret: "${VURBO_JWT_SECRET:vurbo-dev-secret-change-me-please-32}"
+    ttl-hours: 12
+  admin:
+    username: ${VURBO_ADMIN_USERNAME:admin}
+    password: ${VURBO_ADMIN_PASSWORD:admin123}
+    name: ${VURBO_ADMIN_NAME:Administrador}

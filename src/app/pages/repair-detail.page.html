@@ -1,0 +1,51 @@
+<a class="back" routerLink="/reparacoes">Reparações</a>
+
+@if (error() && !repair()) {
+  <p class="banner" role="alert">{{ error() }}</p>
+}
+
+@if (repair(); as repair) {
+  <header class="page-head">
+    <div>
+      <p class="eyebrow">{{ repair.locality }}</p>
+      <h1>{{ repair.brand }}</h1>
+      <p class="lede">{{ repair.applianceType }}@if (repair.model) { · {{ repair.model }} }</p>
+    </div>
+    <button type="button" class="secondary" [disabled]="busy()" (click)="toggle()">
+      {{ repair.status === 'ABERTA' ? 'Fechar reparação' : 'Reabrir reparação' }}
+    </button>
+  </header>
+
+  <section class="card detail">
+    <span class="pill" [class.open]="repair.status === 'ABERTA'" [class.closed]="repair.status === 'FECHADA'">{{ statusLabel(repair.status) }}</span>
+    <p>{{ repair.description }}</p>
+    <p class="muted">Publicada em {{ formatWhen(repair.createdAt) }}</p>
+  </section>
+
+  @if (error()) {
+    <p class="banner" role="alert">{{ error() }}</p>
+  }
+
+  <section>
+    <h2>Interessados</h2>
+    @if (applications().length === 0) {
+      <p class="empty-inline">Ainda ninguém se candidatou.</p>
+    } @else {
+      <ol class="interest">
+        @for (application of applications(); track application.id) {
+          <li [class.first]="application.position === 1">
+            <span class="position">{{ application.position }}</span>
+            <div>
+              <strong>{{ application.technicianName }}</strong>
+              <span class="muted">{{ application.technicianUsername }}</span>
+              @if (application.position === 1) {
+                <span class="badge">Primeiro interesse</span>
+              }
+            </div>
+            <time>{{ formatWhen(application.createdAt) }}</time>
+          </li>
+        }
+      </ol>
+    }
+  </section>
+}
