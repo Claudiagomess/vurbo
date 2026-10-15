@@ -1,0 +1,22 @@
+<main class="login">
+  <section class="login-card">
+    <p class="eyebrow">Peças e reparações</p>
+    <h1>Vurbo</h1>
+    <p class="lede">A empresa publica a reparação. O técnico candidata-se. Quem mostrou interesse primeiro fica no topo da lista.</p>
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <label>
+        Utilizador
+        <input formControlName="username" autocomplete="username" />
+      </label>
+      <label>
+        Palavra-passe
+        <input formControlName="password" type="password" autocomplete="current-password" />
+      </label>
+      @if (error()) {
+        <p class="banner" role="alert">{{ error() }}</p>
+      }
+      <button type="submit" [disabled]="busy()">{{ busy() ? 'A entrar…' : 'Entrar' }}</button>
+    </form>
+    <p class="hint">Acesso inicial da empresa: admin / admin123. Mude a palavra-passe em Conta.</p>
+  </section>
+</main>

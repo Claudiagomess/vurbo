@@ -1,0 +1,21 @@
+<div class="shell">
+  <aside>
+    <a class="brand" routerLink="/">Vurbo</a>
+    <p class="who">{{ user()?.name }}</p>
+    <p class="role">{{ roleText() }}</p>
+    <nav>
+      @if (user()?.role === 'EMPRESA') {
+        <a routerLink="/reparacoes" routerLinkActive="active">Reparações</a>
+        <a routerLink="/tecnicos" routerLinkActive="active">Técnicos</a>
+      } @else {
+        <a routerLink="/trabalho" routerLinkActive="active">Reparações abertas</a>
+        <a routerLink="/candidaturas" routerLinkActive="active">As minhas candidaturas</a>
+      }
+      <a routerLink="/conta" routerLinkActive="active">Conta</a>
+    </nav>
+    <button type="button" class="ghost" (click)="logout()">Sair</button>
+  </aside>
+  <main>
+    <router-outlet />
+  </main>
+</div>

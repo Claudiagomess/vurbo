@@ -1,0 +1,27 @@
+<header class="page-head">
+  <div>
+    <p class="eyebrow">Conta</p>
+    <h1>{{ user()?.name }}</h1>
+    <p class="lede">{{ user()?.username }}</p>
+  </div>
+</header>
+
+<form class="card form-grid" [formGroup]="form" (ngSubmit)="submit()">
+  <label>
+    Palavra-passe atual
+    <input type="password" formControlName="currentPassword" autocomplete="current-password" />
+  </label>
+  <label>
+    Nova palavra-passe
+    <input type="password" formControlName="newPassword" autocomplete="new-password" />
+  </label>
+  @if (notice()) {
+    <p class="banner ok wide">{{ notice() }}</p>
+  }
+  @if (error()) {
+    <p class="banner wide" role="alert">{{ error() }}</p>
+  }
+  <div class="wide">
+    <button type="submit" [disabled]="busy()">Atualizar palavra-passe</button>
+  </div>
+</form>

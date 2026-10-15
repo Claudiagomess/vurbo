@@ -1,0 +1,36 @@
+<header class="page-head">
+  <div>
+    <p class="eyebrow">Empresa</p>
+    <h1>Nova reparação</h1>
+  </div>
+  <a class="button secondary" routerLink="/reparacoes">Voltar</a>
+</header>
+
+<form class="card form-grid" [formGroup]="form" (ngSubmit)="submit()">
+  <label>
+    Marca
+    <input formControlName="brand" />
+  </label>
+  <label>
+    Tipo de aparelho
+    <input formControlName="applianceType" placeholder="Máquina de lavar, forno, frigorífico…" />
+  </label>
+  <label>
+    Modelo
+    <input formControlName="model" />
+  </label>
+  <label>
+    Localidade
+    <input formControlName="locality" />
+  </label>
+  <label class="wide">
+    Descrição da avaria
+    <textarea formControlName="description" rows="5"></textarea>
+  </label>
+  @if (error()) {
+    <p class="banner wide" role="alert">{{ error() }}</p>
+  }
+  <div class="wide">
+    <button type="submit" [disabled]="busy()">{{ busy() ? 'A publicar…' : 'Publicar reparação' }}</button>
+  </div>
+</form>

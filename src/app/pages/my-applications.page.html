@@ -1,0 +1,32 @@
+<header class="page-head">
+  <div>
+    <p class="eyebrow">Técnico</p>
+    <h1>As minhas candidaturas</h1>
+  </div>
+</header>
+
+@if (error()) {
+  <p class="banner" role="alert">{{ error() }}</p>
+} @else if (applications().length === 0) {
+  <section class="empty">
+    <h2>Ainda não se candidatou</h2>
+    <p>As reparações a que se candidatar ficam aqui, com a sua posição na fila.</p>
+  </section>
+} @else {
+  <ol class="interest">
+    @for (application of applications(); track application.id) {
+      <li [class.first]="application.position === 1">
+        <span class="position">{{ application.position }}</span>
+        <div>
+          <strong>{{ application.repair.brand }} · {{ application.repair.locality }}</strong>
+          <span>{{ application.repair.applianceType }}</span>
+          <span class="pill" [class.open]="application.repair.status === 'ABERTA'" [class.closed]="application.repair.status === 'FECHADA'">{{ statusLabel(application.repair.status) }}</span>
+          @if (application.position === 1) {
+            <span class="badge">Primeiro interesse</span>
+          }
+        </div>
+        <time>{{ formatWhen(application.createdAt) }}</time>
+      </li>
+    }
+  </ol>
+}
