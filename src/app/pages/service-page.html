@@ -1,0 +1,44 @@
+<section class="wrap page-head">
+  <p class="kicker">{{ page().kicker }}</p>
+  <h1>{{ page().title }}</h1>
+  <p class="lede">{{ page().lede }}</p>
+</section>
+
+<section class="wrap section grid-2">
+  <div class="stack">
+    @for (point of page().points; track point) {
+      <article class="panel">
+        <p>{{ point }}</p>
+      </article>
+    }
+  </div>
+
+  <aside class="panel">
+    @if (page().actions.length) {
+      <h2>Pedir apoio</h2>
+      <p>O pedido fica na tua conta, para acompanhares o orçamento e os aparelhos.</p>
+      <div class="actions">
+        @for (action of page().actions; track action.link) {
+          <a class="btn" [routerLink]="action.link" [queryParams]="action.query">{{ action.label }}</a>
+        }
+      </div>
+      @if (!auth.user()) {
+        <p class="meta">Se ainda não tiveres conta, pedimos-te para entrar ou criar uma antes do formulário.</p>
+      }
+    } @else if (sent) {
+      <h2>Pedido recebido</h2>
+      <p class="ok">A Vurbo vai usar estes dados para te contactar sobre {{ page().kicker }}.</p>
+    } @else {
+      <h2>Pedir contacto</h2>
+      <p>Deixa o que precisas. Não é preciso criar conta.</p>
+      @if (error) { <p class="error">{{ error }}</p> }
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <label><span>Nome</span><input formControlName="name" /></label>
+        <label><span>Email</span><input type="email" formControlName="email" /></label>
+        <label><span>Telefone</span><input formControlName="phone" /></label>
+        <label><span>O que precisas</span><textarea formControlName="message"></textarea></label>
+        <button class="btn" type="submit" [disabled]="sending">{{ sending ? 'A enviar…' : 'Enviar' }}</button>
+      </form>
+    }
+  </aside>
+</section>

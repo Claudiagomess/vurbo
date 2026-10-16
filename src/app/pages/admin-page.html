@@ -1,0 +1,100 @@
+<section class="wrap page-head">
+  <p class="kicker">Administração</p>
+  <h1>Entre o cliente e o técnico</h1>
+  <p class="lede">Aprovas técnicos, defines o custo para o cliente e a remuneração do técnico, e escolhes a candidatura.</p>
+</section>
+
+<section class="wrap section stack">
+  @if (error) { <p class="error">{{ error }}</p> }
+  @if (info) { <p class="ok">{{ info }}</p> }
+
+  <section class="panel">
+    <h2>Técnicos por aprovar</h2>
+    <div class="list">
+      @for (technician of technicians(); track technician.id) {
+        <article class="split">
+          <div>
+            <strong>{{ technician.name }}</strong>
+            <p class="meta">{{ technician.email }} · {{ technician.phone }}</p>
+          </div>
+          <div class="row-actions">
+            <button class="btn" type="button" (click)="decideTechnician(technician, true)">Aprovar</button>
+            <button class="btn secondary" type="button" (click)="decideTechnician(technician, false)">Recusar</button>
+          </div>
+        </article>
+      } @empty {
+        <p class="meta">Não há técnicos à espera.</p>
+      }
+    </div>
+  </section>
+
+  <section class="stack">
+    <h2>Pedidos</h2>
+    @for (request of requests(); track request.id) {
+      <article class="panel">
+        <span class="chip">{{ labelStatus(request.status) }}</span>
+        <h3>{{ labelLine(request.serviceLine) }} · {{ labelType(request.requestType) }}</h3>
+        <p class="meta">{{ date(request.createdAt) }} · {{ request.clientName }} · {{ request.clientPhone }}</p>
+        <p>{{ request.address }}, {{ request.postalCode }} {{ request.city }}</p>
+        @if (request.problemDescription) { <p>{{ request.problemDescription }}</p> }
+        @if (request.applianceType) { <p class="meta">{{ request.applianceType }} · {{ request.brand }} {{ request.model }} {{ request.serialNumber }}</p> }
+        @if (request.acCount) { <p class="meta">{{ request.areaM2 }} m² · {{ request.acCount }} equipamento(s) · {{ request.brandPreferences }}</p> }
+        @if (request.cost != null) { <p>Custo para o cliente: <strong>{{ euro(request.cost) }}</strong></p> }
+        @if (request.remuneration != null) { <p>Remuneração do técnico: <strong>{{ euro(request.remuneration) }}</strong></p> }
+        @if (request.assignedTechnicianName) { <p class="meta">Técnico atribuído: {{ request.assignedTechnicianName }}</p> }
+
+        @if (request.status === 'SUBMITTED') {
+          @if (quoting() === request.id) {
+            <form class="form-grid" [formGroup]="quoteForm" (ngSubmit)="sendQuote(request)">
+              <label><span>Custo para o cliente (€)</span><input type="number" min="0.01" step="0.01" formControlName="cost" /></label>
+              <label><span>Remuneração do técnico (€)</span><input type="number" min="0.01" step="0.01" formControlName="remuneration" /></label>
+              <div class="span-2 row-actions">
+                <button class="btn" type="submit">Enviar orçamento</button>
+              </div>
+            </form>
+            <p class="meta">O cliente só vê o custo. A remuneração aparece aos técnicos depois de o cliente aceitar.</p>
+          } @else {
+            <button class="btn" type="button" (click)="startQuote(request)">Definir orçamento</button>
+          }
+        }
+
+        @if (applications()[request.id]?.length) {
+          <div class="list">
+            @for (application of applications()[request.id]; track application.id) {
+              <article class="split">
+                <div>
+                  <strong>{{ application.technicianName }}</strong>
+                  <p class="meta">{{ labelStatus(application.status) }} · {{ application.technicianPhone }}</p>
+                  @if (application.message) { <p>{{ application.message }}</p> }
+                </div>
+                @if (application.status === 'PENDING' && request.status === 'OPEN') {
+                  <div class="row-actions">
+                    <button class="btn" type="button" (click)="decideApplication(application, true)">Aceitar</button>
+                    <button class="btn secondary" type="button" (click)="decideApplication(application, false)">Recusar</button>
+                  </div>
+                }
+              </article>
+            }
+          </div>
+        }
+      </article>
+    } @empty {
+      <p class="meta">Ainda não há pedidos.</p>
+    }
+  </section>
+
+  <section class="panel">
+    <h2>Contactos de Rent e Care</h2>
+    <div class="list">
+      @for (lead of leads(); track lead.id) {
+        <article>
+          <strong>{{ labelTopic(lead.topic) }} · {{ lead.name }}</strong>
+          <p class="meta">{{ date(lead.createdAt) }} · {{ lead.email }} · {{ lead.phone }}</p>
+          <p>{{ lead.message }}</p>
+        </article>
+      } @empty {
+        <p class="meta">Sem contactos.</p>
+      }
+    </div>
+  </section>
+</section>

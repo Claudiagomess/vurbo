@@ -1,0 +1,35 @@
+<div class="shell">
+  <header class="topbar">
+    <div class="wrap">
+      <a class="brand" routerLink="/">
+        <strong>Vurbo</strong>
+        <span>em casa</span>
+      </a>
+      <nav class="nav">
+        <a routerLink="/vurbo" routerLinkActive="active">Vurbo</a>
+        <a routerLink="/vurbo-air" routerLinkActive="active">Vurbo Air</a>
+        <a routerLink="/vurbo-rent" routerLinkActive="active">Vurbo Rent</a>
+        <a routerLink="/vurbo-care" routerLinkActive="active">Vurbo Care</a>
+      </nav>
+      <div class="account">
+        @if (auth.user(); as user) {
+          <span class="who">{{ user.name }}</span>
+          <a class="btn secondary" [routerLink]="area()">Área reservada</a>
+          <button class="btn ghost" type="button" (click)="logout()">Sair</button>
+        } @else {
+          <a class="text-link" routerLink="/registo">Criar conta</a>
+          <a class="btn" routerLink="/entrar">Entrar</a>
+        }
+      </div>
+    </div>
+  </header>
+  <main>
+    <router-outlet />
+  </main>
+  <footer class="footer">
+    <div class="wrap">
+      <span>Vurbo · eletrodomésticos e ar condicionado</span>
+      <span>Orçamento primeiro. Técnico depois da tua aceitação.</span>
+    </div>
+  </footer>
+</div>

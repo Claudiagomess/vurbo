@@ -1,0 +1,21 @@
+<section class="wrap narrow panel">
+  <p class="kicker">Conta</p>
+  <h2>Criar conta</h2>
+  <p class="meta">Clientes ficam ativos de imediato. Técnicos só veem pedidos depois de a Vurbo aprovar a conta. Contas de administração são criadas pela equipa.</p>
+  @if (error) { <p class="error">{{ error }}</p> }
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <label><span>Nome</span><input formControlName="name" /></label>
+    <label><span>Email</span><input type="email" formControlName="email" /></label>
+    <label><span>Telefone</span><input formControlName="phone" /></label>
+    <label><span>Palavra-passe</span><input type="password" formControlName="password" /></label>
+    <label>
+      <span>Perfil</span>
+      <select formControlName="role">
+        <option value="CLIENT">Cliente</option>
+        <option value="TECHNICIAN">Técnico</option>
+      </select>
+    </label>
+    <button class="btn" type="submit" [disabled]="sending">{{ sending ? 'A criar…' : 'Criar conta' }}</button>
+  </form>
+  <p class="meta">Já tens conta? <a routerLink="/entrar">Entrar</a></p>
+</section>
